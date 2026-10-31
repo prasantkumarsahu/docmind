@@ -57,14 +57,16 @@ docker exec docmind-ollama ollama pull llama3.2:3b
 docker exec docmind-ollama ollama pull nomic-embed-text
 ```
 
-Backend (http://localhost:8080):
+Backend (http://localhost:8080). Wait for `Started DocmindApplication`:
 
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
 
-Frontend (http://localhost:5173):
+On Windows use `.\mvnw.cmd spring-boot:run`.
+
+Frontend (http://localhost:5173), in a second terminal:
 
 ```bash
 cd frontend
@@ -72,9 +74,25 @@ npm install
 npm run dev
 ```
 
-Upload `samples/acme-handbook.md` and ask *"How many days of notice do I need to give?"*.
+## Trying it out
 
-The first answer can take a while on CPU while the model loads into memory.
+1. Open http://localhost:5173
+2. Upload `samples/acme-handbook.md` and wait until its status shows **Ready**
+3. Ask *"How many days of notice do I need to give?"*. The answer is **60 days**, with a citation and a source card
+4. Ask a follow-up such as *"And what about remote work?"* to see conversation memory in action
+5. Ask *"What is the capital of France?"*. DocMind replies that the documents do not contain the answer
+
+The first answer can take a minute or two on CPU while the model loads into memory; later answers are much faster.
+
+## Stopping
+
+Press `Ctrl+C` in the backend and frontend terminals, then:
+
+```bash
+docker compose down
+```
+
+Add `-v` to also delete the database and downloaded models.
 
 ## Configuration
 
@@ -120,6 +138,8 @@ curl -H 'Content-Type: application/json' localhost:8080/api/chat \
 cd backend && ./mvnw test
 cd frontend && npm run lint && npm run build
 ```
+
+On Windows use `.\mvnw.cmd test`.
 
 ## License
 
